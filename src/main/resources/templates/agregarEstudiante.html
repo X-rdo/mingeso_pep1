@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/estudiante/guardar-estudiante}">
+
+
+
+    <label for="rut" > Ingrese su rut: </label>
+    <input type="text" name="rut" placeholder="9-0" id="rut" required>
+    <br>
+    <label for="nombres" > Ingrese su nombre: </label>
+    <input type="text" name="nombres" placeholder="Elza po" id="nombres" required>
+    <br>
+    <label for="apellidos" > Ingrese su apellido: </label>
+    <input type="text" name="apellidos" placeholder="po" id="apellidos" required>
+    <br>
+
+    <label for= "fecha_nacimiento"> Fecha de Nacimiento: </label>
+    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" required>
+
+    <br>
+    <label for="tipoColegio" > Ingrese el tipo de colegio: </label>
+    <select name="tipoColegio" id="tipoColegio">
+        <option value="1"> Municipal</option>
+        <option value="2"> Particular subencionado</option>
+        <option value="3"> Particular</option>
+        <option value="4"> No aplica</option>
+    </select>
+    <br>
+    <label for="nombre_colegio">Nombre del colegio: </label>
+    <input type="text" name="nombre_colegio" id="nombre_colegio" required>
+    <br>
+
+    <label for="anho_egreso_colegio">Año de Egreso: </label>
+    <input type="number" name="anho_egreso_colegio" id="anho_egreso_colegio" required>
+
+    <br>
+
+    <button type="submit"> agregar estudiante</button>
+
+</form>
+
+
+</body>
+</html>
