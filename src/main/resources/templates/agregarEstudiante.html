@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form method="post" th:action="@{/estudiante/guardar-estudiante}">
+<form method="post" th:action="@{/estudiante/guardar-estudiante}" onsubmit="alert('Se creo el usuario correctamente')">
 
 
 
@@ -29,8 +29,8 @@
     <label for="tipoColegio" > Ingrese el tipo de colegio: </label>
     <select name="tipoColegio" id="tipoColegio">
         <option value="1"> Municipal</option>
-        <option value="2"> Particular subencionado</option>
-        <option value="3"> Particular</option>
+        <option value="2"> Subencionado</option>
+        <option value="3"> Privado </option>
         <option value="4"> No aplica</option>
     </select>
     <br>
@@ -46,6 +46,8 @@
     <button type="submit"> agregar estudiante</button>
 
 </form>
+
+<a href="http://localhost:8090" class="boton">Volver al menú de inicio</a>
 
 
 </body>

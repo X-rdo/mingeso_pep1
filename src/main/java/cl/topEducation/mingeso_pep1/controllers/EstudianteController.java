@@ -30,9 +30,9 @@ public class EstudianteController {
 
     //@requestParam string rur
     @GetMapping("/nuevo-estudiante")
-    public String nuevoAlumno(Model myModel){
+    public String nuevoAlumno(Model model){
         EstudianteEntity estudiante = new EstudianteEntity();
-        myModel.addAttribute("estudiante", estudiante);
+        model.addAttribute("estudiante", estudiante);
         return "agregarEstudiante";
     }
 
@@ -42,7 +42,7 @@ public class EstudianteController {
         estudianteService.guardarEstudiante(estudiante);
         ArrayList<EstudianteEntity>estudiantes=estudianteService.obtenerEstudiantes();
         model.addAttribute("estudiantes",estudiantes);
-        return "index";
+        return "main_menu";
         //return "redirect:/estudiante/listar";
     }
 

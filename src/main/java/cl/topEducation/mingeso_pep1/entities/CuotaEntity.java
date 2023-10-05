@@ -19,5 +19,6 @@ public class CuotaEntity {
     private Long monto;
     private boolean estado_pago;
     private String rut;
+    private int mes_cuota; //Tiene que partir de 4 en la primera cuota
 
 }

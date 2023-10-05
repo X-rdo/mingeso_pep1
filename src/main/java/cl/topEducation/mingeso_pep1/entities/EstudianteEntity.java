@@ -23,6 +23,7 @@ public class EstudianteEntity {
     private int tipoColegio; //Se considera que este campo no puede ser NULL, debido a que no se indica nada de estudiantes los cuales no poseen colegio
     private String nombre_colegio;
     private int anho_egreso_colegio;
+    private double arancel;
 
 
 }
