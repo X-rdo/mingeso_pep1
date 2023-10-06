@@ -57,5 +57,14 @@ public class EstudianteService {
         }
     }
 
+    public boolean verificarEstudiante(String rut){
+        Optional<EstudianteEntity> estudiante = estudianteRepository.findById(rut);
+        if (estudiante.isPresent()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 }

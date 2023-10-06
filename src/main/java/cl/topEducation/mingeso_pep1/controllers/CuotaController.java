@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class CuotaController {
     @Autowired
     CuotaService cuotaService;
+    EstudianteService estudianteService;
 
 
     //verificar establecimiento
@@ -35,23 +36,31 @@ public class CuotaController {
     }
 
     @GetMapping
-    public String ejemplo(@RequestParam(name= "rut") String rut,
+    public String pedido(@RequestParam(name= "rut") String rut,
                           @RequestParam(name = "tipoPago") int tipoPago,
                           Model model){
         //Logica del controlador
 
-        if(tipoPago == 1){ //contado
-            return "main_menu"; //
-        }else{//buscar por rut el tipo de colegio
+        //Si Tiene cuotas
+        //ver el tema de englobar todo en una option si no se cumple lo requerido
+        //te tira de vuelta diciendo que no existe el estudiante o opcion
 
-            // ver que tipos de vista van a llegar
+        if(estudianteService.verificarEstudiante(rut) ){//verificas si existe el estudiante
+            if(tipoPago == 1 ){ //contado te deriva al arancel y todo
+                pagoContado(rut) //Una cuota gigante pero con el arancel a la mitad
+                return "main_menu"; //
+            }else if(tipoPago == 2){
+                //buscar por rut el tipo de colegio
+                //if(tipoColegio)
+                //return direccion para determinado tipo de colegio
+                // ver que tipos de vista van a llegar
 
             /*
             if(tipoColegio){
                 //redireccionamos a las paginas correspondientes
             }
             */
-
+        }
             return "main_menu";
 
         }
