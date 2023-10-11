@@ -1,5 +1,6 @@
 package cl.topEducation.mingeso_pep1.controllers;
 
+import cl.topEducation.mingeso_pep1.entities.CuotaEntity;
 import cl.topEducation.mingeso_pep1.services.CuotaService;
 import cl.topEducation.mingeso_pep1.services.EstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
 
 @RequestMapping("/cuota")
 @Controller
@@ -89,5 +92,17 @@ public class CuotaController {
     public String cuotasPrivado (@ModelAttribute("rut") String rut, @RequestParam int cantCuotas, Model model){
         cuotaService.generarCuotas(rut, cantCuotas);
         return "redirect:/";
+    }
+
+    @GetMapping("/rut-estudiante-listar")
+    public String rutEstudianteListar() {
+        return "rut-estudiante-listar";
+    }
+
+    @PostMapping("/rut-estudiante-listar-cuota")
+    public String listar(@RequestParam String rut, Model model){
+        ArrayList<CuotaEntity> cuotas = cuotaService.obtenerCutoasByRut(rut);
+        model.addAttribute("cuotas",cuotas);
+        return "listarCuotasEstudiante";
     }
 }

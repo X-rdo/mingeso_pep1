@@ -27,6 +27,25 @@ public class CuotaService {
         return (ArrayList<CuotaEntity>) cuotaRepository.findAll();
     }
 
+    public ArrayList<CuotaEntity> obtenerCutoasByRut(String rut){
+        ArrayList<CuotaEntity> cuotasTotales = (ArrayList<CuotaEntity>) cuotaRepository.findByRut(rut);
+        ArrayList<CuotaEntity> cuotasAnhoActual = new ArrayList<CuotaEntity>();
+        int diferencia;
+        Calendar calendario = Calendar.getInstance();
+
+        int anhoActual = calendario.get(Calendar.YEAR);
+
+        for (CuotaEntity cuota: cuotasTotales) {
+            LocalDate fecha = cuota.getFecha_cuota();
+            diferencia = anhoActual - fecha.getYear();
+            if(diferencia == 0){
+                cuotasAnhoActual.add(cuota);
+            }
+        }
+        return cuotasAnhoActual;
+
+    }
+
 
     //metodo que ve si hay cuotas del año actual
     //Si encuentra cuotas del año actual true
@@ -70,7 +89,7 @@ public class CuotaService {
                 cuotaVariable = new CuotaEntity();
                 cuotaVariable.setNumero_cuota(i);
                 cuotaVariable.setMonto(cantidadPorCuota);
-                cuotaVariable.setEstado_pago(false); //Recordar cambiar el estado a string para la visualizacion en
+                cuotaVariable.setEstado_pago("No pagada"); //Recordar cambiar el estado a string para la visualizacion en
                 cuotaVariable.setRut(rut);
                 cuotaVariable.setFecha_cuota(LocalDate.of(anhoActual,mesPartidaCuotas,5));
                 mesPartidaCuotas += 1;

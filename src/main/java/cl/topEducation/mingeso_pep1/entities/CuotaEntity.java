@@ -19,7 +19,7 @@ public class CuotaEntity {
     private Long id;
     private int numero_cuota;
     private Long monto;
-    private boolean estado_pago;
+    private String estado_pago;
     private String rut;
     private LocalDate fecha_cuota; //Tiene que partir de 4 en la primera cuota
 
