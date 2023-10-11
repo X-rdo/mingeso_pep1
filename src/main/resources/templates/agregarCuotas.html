@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Formulario de tipo de pago</h1>
-<form method="post" th:action="@{/cuota/guardar-cuotas}" onsubmit="alert('Operación realizada con exito')">
+<form method="post" th:action="@{/cuota/generar-cuotas}">
     <label for="rut">Ingrese el rut a realizar el formulario:</label>
     <input type="rut" id="rut" name="rut">
     <br>
@@ -16,8 +16,8 @@
     <label for="tipoPago">Seleccionar forma de pago:</label>
     <select id="tipoPago" name="tipoPago">
         <option value="">Selecciona el tipo de pago</option>
-        <option value="1">Al contado</option>
-        <option value="0">A cuotas</option>
+        <option value=1>Al contado</option>
+        <option value=2>A cuotas</option>
     </select>
 
     <!-- Opciones secundarias para pagar al contaado -->

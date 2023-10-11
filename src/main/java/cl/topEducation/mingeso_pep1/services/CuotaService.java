@@ -18,33 +18,13 @@ import java.util.Optional;
 public class CuotaService {
     @Autowired
     CuotaRepository cuotaRepository;
+    @Autowired
     EstudianteRepository estudianteRepository;
+    @Autowired
     EstudianteService estudianteService;
 
     public ArrayList<CuotaEntity> obtenerCuotas(){
         return (ArrayList<CuotaEntity>) cuotaRepository.findAll();
-    }
-
-
-    public void generarCuotas(String rut,int cantidadCuotas,boolean alContado){
-        existenCuotas(rut);
-        estudianteService.verificarEstudiante(rut);
-        Optional<EstudianteEntity> estudiante;
-        estudiante = estudianteRepository.findById(rut);
-        //contado?
-        EstudianteEntity estudiante1 = estudiante.get();
-        if(estudiante.isPresent()){
-                //cantidad cuotas?
-        }else {
-            throw new EntityExistsException("No existe un estudiante con el rut ingresado");
-        }
-    }
-
-    public void existenCuotas(String rut){
-        boolean existeCuota = cuotaRepository.existsByRut(rut);
-        if(existeCuota){
-            throw new EntityExistsException(rut + "El rut puesto ya se le han generado cuotas" );
-        }
     }
 
 
@@ -61,12 +41,45 @@ public class CuotaService {
         for (CuotaEntity cuota: cuotas) {
              LocalDate fecha = cuota.getFecha_cuota();
              diferencia = anhoActual - fecha.getYear();
-             if(diferencia != 0){
+             if(diferencia == 0){
                  return true;
              }
         }
         return false;
 
+    }
+
+    //capaz puede retornar un 1 o -1 para ver si corrió perfectamente
+    public void generarCuotas(String rut, int cantCuotas){
+        Optional<EstudianteEntity> estudiante = estudianteRepository.findById(rut);
+        if(estudiante.isPresent()){
+            CuotaEntity cuotaVariable;
+            double arancelEstudiante = estudiante.get().getArancel();
+
+            Calendar calendario = Calendar.getInstance();
+            int anhoActual = calendario.get(Calendar.YEAR);
+            int mesPartidaCuotas = 4;
+            long cantidadPorCuota;
+
+            if(cantCuotas == -1){
+                cantidadPorCuota = (long) (arancelEstudiante*0.5);
+            }else{
+                 cantidadPorCuota= (long) (arancelEstudiante/cantCuotas);
+            }
+            for(int i = 1;i<cantCuotas + 1;++i){
+                cuotaVariable = new CuotaEntity();
+                cuotaVariable.setNumero_cuota(i);
+                cuotaVariable.setMonto(cantidadPorCuota);
+                cuotaVariable.setEstado_pago(false); //Recordar cambiar el estado a string para la visualizacion en
+                cuotaVariable.setRut(rut);
+                cuotaVariable.setFecha_cuota(LocalDate.of(anhoActual,mesPartidaCuotas,5));
+                mesPartidaCuotas += 1;
+                if (mesPartidaCuotas > 12){
+                    mesPartidaCuotas = 1;
+                }
+                cuotaRepository.save(cuotaVariable);
+            }
+        }
     }
 
 

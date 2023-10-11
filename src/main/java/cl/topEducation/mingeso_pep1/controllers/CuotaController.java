@@ -1,77 +1,93 @@
 package cl.topEducation.mingeso_pep1.controllers;
 
-import cl.topEducation.mingeso_pep1.entities.CuotaEntity;
-import cl.topEducation.mingeso_pep1.entities.EstudianteEntity;
 import cl.topEducation.mingeso_pep1.services.CuotaService;
 import cl.topEducation.mingeso_pep1.services.EstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequestMapping("/cuota")
 @Controller
 public class CuotaController {
     @Autowired
     CuotaService cuotaService;
+    @Autowired
     EstudianteService estudianteService;
 
-
-    //verificar establecimiento
-    @GetMapping("/generear-cuotas")
-    public String generarCuotas(Model model){
-        ArrayList<CuotaEntity> cuotas = new ArrayList<CuotaEntity>();
-        model.addAttribute("cuotas", cuotas);
-        return "agregarCuotas";
-    }
-    @GetMapping("/guardar-cuotas")
-    public String guardarCuotas(Model model){
-        ArrayList<CuotaEntity> cuotas = new ArrayList<CuotaEntity>();
-        model.addAttribute("cuotas", cuotas);
+    @GetMapping("/generar-cuotas")
+    public String guardarCuotas() {
         return "agregarCuotas";
     }
 
-    @GetMapping
-    public String pedido(@RequestParam(name= "rut") String rut,
-                          @RequestParam(name = "tipoPago") int tipoPago,
-                          Model model){
-        //Logica del controlador
 
-        //Si Tiene cuotas
-        //ver el tema de englobar todo en una option si no se cumple lo requerido
+    @PostMapping("/generar-cuotas")
+    public String generarCuotas(@RequestParam(name = "rut") String rut,
+                                @RequestParam(name = "tipoPago") int tipoPago,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
         //te tira de vuelta diciendo que no existe el estudiante o opcion
-
-        if(estudianteService.verificarEstudiante(rut) ){//verificas si existe el estudiante
-            if(tipoPago == 1 ){ //contado te deriva al arancel y todo
-                pagoContado(rut) //Una cuota gigante pero con el arancel a la mitad
+        if (estudianteService.verificarEstudiante(rut) && !cuotaService.hayCuotasActuales(rut)) {
+            //verificas si existe el estudiante y si tiene cuotas de este año
+            int tipoColegio = estudianteService.verificarEstablecimiento(rut);
+            if (tipoPago == 1) {
+                //El pago al contado se considera como una sola cuota "especial"
+                cuotaService.generarCuotas(rut,-1);
                 return "main_menu"; //
-            }else if(tipoPago == 2){
-                //buscar por rut el tipo de colegio
-                //if(tipoColegio)
-                //return direccion para determinado tipo de colegio
-                // ver que tipos de vista van a llegar
-
-            /*
-            if(tipoColegio){
-                //redireccionamos a las paginas correspondientes
+            } else if (tipoPago == 2) {
+                //Se redirecciona por el tipo de colegio
+                if(tipoColegio == 1){
+                    redirectAttributes.addFlashAttribute("rut", rut);
+                    return "redirect:/cuota/cuotaMunicipal";
+                } else if (tipoColegio == 2) {
+                    redirectAttributes.addFlashAttribute("rut", rut);
+                    return "redirect:/cuota/cuotaSubencionado";
+                } else {
+                    //generarCuotas()
+                    redirectAttributes.addFlashAttribute("rut", rut);
+                    return "redirect:/cuota/cuotaPrivado";
+                }
             }
-            */
         }
-            return "main_menu";
-
-        }
-
-
+        //se redirecciona diciendo que no se encontró al usuario con determinado rut o que ya se generaron las cuotas
+        // falta el alert y todo eso
+        return "main_menu";
     }
 
-    @GetMapping("/listar")
-    public String listar(Model model){
-        ArrayList<CuotaEntity> cuotas=cuotaService.obtenerCuotas();
-        model.addAttribute("cuota",cuotas);
-        return "index";
+    @GetMapping("/cuotaSubencionado")
+    public String guardarCuotasSubencionado() {
+        return "cuota/subencionado";
+    }
+
+
+    @PostMapping("/cuotaSubencionado")
+    public String cuotasSubvencionado (@ModelAttribute("rut") String rut, @RequestParam int cantCuotas, Model model){
+        cuotaService.generarCuotas(rut, cantCuotas);
+        return "redirect:/";
+    }
+
+    @GetMapping("/cuotaMunicipal")
+    public String guardarCuotasMunicipal() {
+        return "cuota/municipal";
+    }
+
+
+    @PostMapping("/cuotaMunicipal")
+    public String cuotasMunicipal (@ModelAttribute("rut") String rut, @RequestParam int cantCuotas, Model model){
+        cuotaService.generarCuotas(rut, cantCuotas);
+        return "redirect:/";
+    }
+
+    @GetMapping("/cuotaPrivado")
+    public String guardarCuotasPrivado() {
+        return "cuota/privado";
+    }
+
+
+    @PostMapping("/cuotaPrivado")
+    public String cuotasPrivado (@ModelAttribute("rut") String rut, @RequestParam int cantCuotas, Model model){
+        cuotaService.generarCuotas(rut, cantCuotas);
+        return "redirect:/";
     }
 }

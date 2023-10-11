@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="${rut}"></p>
+<form method="post" th:action="@{/cuota/cuotaPrivado}" onsubmit="alert('Se han generado las cuotas')">
+    <input type="hidden" name="rut" th:value="${rut}"/>
+    <label for="cantCuotas" > Ingrese la cantidad de cuotas: </label>
+    <select name="cantCuotas" id="cantCuotas">
+        <option value=1>1</option>
+        <option value=2>2</option>
+        <option value=3>3</option>
+        <option value=4>4</option>
+    </select>
+    <br>
+    <button type="submit">Generar cuotas</button>
+
+</form>
+
+<a href="http://localhost:8090" class="boton">Volver al menú de inicio</a>
+
+</body>
+</html>

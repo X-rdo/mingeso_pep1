@@ -47,14 +47,13 @@ public class EstudianteService {
             return arancel;
     }
 
-    public int verificarEstablecimiento(EstudianteEntity estudiante){
-        if(1 == estudiante.getTipoColegio()){
-            return 1;
-        } else if (2 == estudiante.getTipoColegio()) {
-            return 2;
-        } else {
-            return 3;
+    public int verificarEstablecimiento(String rutEstudiante){
+
+        Optional<EstudianteEntity> estudiante = estudianteRepository.findById(rutEstudiante);
+        if(estudiante.isPresent()){
+            return estudiante.get().getTipoColegio();
         }
+        return -1;
     }
 
     public boolean verificarEstudiante(String rut){
@@ -65,6 +64,8 @@ public class EstudianteService {
             return false;
         }
     }
+
+
 
 
 }
