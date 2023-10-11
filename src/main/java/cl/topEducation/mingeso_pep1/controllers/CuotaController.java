@@ -105,4 +105,26 @@ public class CuotaController {
         model.addAttribute("cuotas",cuotas);
         return "listarCuotasEstudiante";
     }
+
+    @GetMapping("/rut-estudiante-listar-p")
+    public String rutEstudianteListarPagos() {
+        return "rut-estudiante-listar-p";
+    }
+
+    @PostMapping("/rut-estudiante-listar-pago")
+    public String listarPagos(@RequestParam String rut, Model model){
+        ArrayList<CuotaEntity> cuotas = cuotaService.obtenerCutoasByRut(rut);
+        model.addAttribute("cuotas",cuotas);
+        return "listarCuotasEstudiantePago";
+    }
+
+    @PostMapping("/rut-estudiante-listar-pago-cuota")
+    public String actualizarEstadoPago(@ModelAttribute("pago") String numeroYRut, Model model){
+        cuotaService.cambiarEstadoPago(numeroYRut);
+        ArrayList<CuotaEntity> cuotas = cuotaService.obtenerCutoasByRut(cuotaService.separarRut(numeroYRut));
+        model.addAttribute("cuotas",cuotas);
+        return "listarCuotasEstudiantePago";
+    }
+
+
 }

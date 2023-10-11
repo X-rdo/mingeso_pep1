@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>TopEducation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<p th:text="${rut}"></p>
+<div class="container-sm">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>RUT</th>
+            <th>Numero de cuota</th>
+            <th>Monto</th>
+            <th>Fecha de emisión</th>
+            <th>Estado Cuota</th>
+            <th>Pagos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cuota:${cuotas}">
+            <td th:text="${cuota.rut}"></td>
+            <td th:text="${cuota.numero_cuota}"></td>
+            <td th:text="${cuota.monto}"></td>
+            <td th:text="${cuota.fecha_cuota}"></td>
+            <td th:text="${cuota.estado_pago}"></td>
+            <td>
+                <form method="post" th:action="@{/cuota/rut-estudiante-listar-pago-cuota}">
+                    <input type="hidden" name="rut" th:value="${rut}"/>
+                    <button type="submit" name="pago" th:value="${cuota.numero_cuota + ',' + cuota.rut}"> Pagar </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="http://localhost:8090" class="boton">Volver al menú de inicio</a>
+</div>
+</body>
+</html>

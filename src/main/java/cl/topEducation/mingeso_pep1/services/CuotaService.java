@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
+import java.text.BreakIterator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,5 +102,34 @@ public class CuotaService {
         }
     }
 
+    //Siendo el numero de cuota el primer dato del string[] y el segundo rut
+    public static String[] separaNumeroYrut(String numeroYRut) {
+        String[] valores = numeroYRut.split(",");
+        return valores;
+    }
 
+    public String separarRut(String numeroYRut) {
+        String[] valores = separaNumeroYrut(numeroYRut);
+        return valores[1];
+    }
+
+    public void cambiarEstadoPago(String numeroYRut){
+        String[] valores = separaNumeroYrut(numeroYRut);
+        int numeroCuota = Integer.parseInt(valores[0]);
+        String rut = valores[1];
+
+        ArrayList<CuotaEntity> cuotas = (ArrayList<CuotaEntity>) cuotaRepository.findByRut(rut);
+        if (!cuotas.isEmpty()){
+            for(CuotaEntity cuota: cuotas){
+
+                if(cuota.getNumero_cuota() == numeroCuota){
+                    cuota.setEstado_pago("Pagado");
+
+                    cuotaRepository.save(cuota);
+                    break;
+                }
+
+            }
+        }
+    }
 }
