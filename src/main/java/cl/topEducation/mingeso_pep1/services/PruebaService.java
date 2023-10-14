@@ -3,22 +3,19 @@ package cl.topEducation.mingeso_pep1.services;
 import cl.topEducation.mingeso_pep1.entities.PruebaEntity;
 import cl.topEducation.mingeso_pep1.repositories.PruebaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 @Service
 public class PruebaService {
@@ -103,4 +100,49 @@ public class PruebaService {
     public ArrayList<PruebaEntity> getAllFiles() {
         return (ArrayList<PruebaEntity>) pruebaRepository.findAll();
     }
+
+    public ArrayList<PruebaEntity> getPorRut(String rut){
+        return (ArrayList<PruebaEntity>) pruebaRepository.findByRut(rut);
+    }
+
+    public ArrayList<PruebaEntity> filtrarPorAnhoActual(ArrayList<PruebaEntity> pruebasEstudiante){
+        ArrayList<PruebaEntity> pruebasAnhoActual = new ArrayList<PruebaEntity>();
+        Calendar calendario = Calendar.getInstance();
+        int anhoActual = calendario.get(Calendar.YEAR);
+        for (PruebaEntity prueba: pruebasEstudiante) {
+            if(prueba.getFecha_examen().getYear() == anhoActual){
+                pruebasAnhoActual.add(prueba);
+            }
+        }
+        return pruebasAnhoActual;
+    }
+
+    public int obtenerPromedio(ArrayList<PruebaEntity> pruebas){
+        int sumaPuntajes= 0;
+        int cantidadPruebas = 0;
+        for (PruebaEntity prueba: pruebas) {
+            sumaPuntajes += prueba.getPuntaje();
+            cantidadPruebas +=1;
+        }
+        if(cantidadPruebas == 0){
+            cantidadPruebas =1;
+        }
+        return (sumaPuntajes / cantidadPruebas);
+    }
+
+    //Se obtienen pruebas del año actual de determinado estudiante
+    public ArrayList<PruebaEntity> obtenerPruebasEstudiante(String rut){
+        return filtrarPorAnhoActual(getPorRut(rut));
+    }
+
+
+
+    /*
+    public int cantExamenesRendidos(String rut){
+
+    }
+
+     */
+
+
 }

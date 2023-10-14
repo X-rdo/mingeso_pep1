@@ -101,6 +101,7 @@ public class CuotaController {
 
     @PostMapping("/rut-estudiante-listar-cuota")
     public String listar(@RequestParam String rut, Model model){
+        cuotaService.verificarYActualizarMontos(rut);
         ArrayList<CuotaEntity> cuotas = cuotaService.obtenerCutoasByRut(rut);
         model.addAttribute("cuotas",cuotas);
         return "listarCuotasEstudiante";
