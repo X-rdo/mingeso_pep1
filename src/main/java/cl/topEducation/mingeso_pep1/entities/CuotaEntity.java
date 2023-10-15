@@ -23,5 +23,6 @@ public class CuotaEntity {
     private String estado_pago;
     private String rut;
     private LocalDate fecha_cuota; //Tiene que partir de 4 en la primera cuota
+    private LocalDate fecha_pago;
 
 }

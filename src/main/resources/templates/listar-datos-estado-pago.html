@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>TopEducation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-sm">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>Rut estudiante</th>
+            <th>Nombre estudiante</th>
+            <th>Apellido estudiante</th>
+            <th>Nro. exámenes rendidos</th>
+            <th>Promedio puntaje exámenes</th>
+            <th>Monto total arancel a pagar</th>
+            <th>Tipo Pago (Contado/Cuota)</th>
+            <th>Nro. total de cuotas pactadas</th>
+            <th>Nro. cuotas pagadas</th>
+            <th>Monto total pagado</th>
+            <th>Fecha último pago</th>
+            <th>Saldo por pagar</th>
+            <th>Nro. Cuotas con retraso</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            <td th:text="${estudiante.get().rut}"></td>
+            <td th:text="${estudiante.get().nombres}"></td>
+            <td th:text="${estudiante.get().apellidos}"></td>
+
+            <td th:text="${datosEnteros.get(0)}"></td>
+            <td th:text="${datosEnteros.get(1)}"></td>
+
+            <td th:text="${datosLong.get(0)}"></td>
+
+            <td th:text="${estudiante.get().tipo_pago}"></td>
+
+            <td th:text="${datosEnteros.get(2)}"></td>
+            <td th:text="${datosEnteros.get(3)}"></td>
+
+            <td th:text="${datosLong.get(1)}"></td>
+
+            <td th:text="${ultimoPago}"></td>
+
+            <td th:text="${datosLong.get(2)}"></td>
+
+            <td th:text="${datosEnteros.get(4)}"></td>
+
+        </tbody>
+    </table>
+    <a href="http://localhost:8090" class="boton">Volver al menú de inicio</a>
+</div>
+</body>
+</html>

@@ -7,6 +7,8 @@ import cl.topEducation.mingeso_pep1.repositories.CuotaRepository;
 import cl.topEducation.mingeso_pep1.repositories.EstudianteRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
@@ -127,6 +129,11 @@ public class CuotaService {
 
                 if(cuota.getNumero_cuota() == numeroCuota){
                     cuota.setEstado_pago("Pagado");
+                    Calendar calendario = Calendar.getInstance();
+                    int anho = calendario.get(Calendar.YEAR);
+                    int mes = calendario.get(Calendar.MONTH);
+                    int dia = calendario.get(Calendar.DAY_OF_MONTH);
+                    cuota.setFecha_pago(LocalDate.of(anho,mes,dia));
 
                     cuotaRepository.save(cuota);
                     break;
@@ -179,7 +186,7 @@ public class CuotaService {
         //Intereses atraso
         int mesesAtraso;
         Calendar calendario = Calendar.getInstance();
-        int mesActual = calendario.get(Calendar.MONTH);
+        int mesActual = calendario.get(Calendar.MONTH) + 1;
 
         for (CuotaEntity cuota: cuotasEstudiante) {
             mesesAtraso = mesActual- cuota.getFecha_cuota().getMonthValue();
@@ -196,4 +203,121 @@ public class CuotaService {
             cuotaRepository.save(cuota);
         }
     }
+
+    public void cambiarTipoPago(String rut, int tipoPagoInt) {
+        String tipoPago;
+        if (tipoPagoInt == 1) {
+            tipoPago = "Contado";
+        } else {
+            tipoPago = "Cuotas";
+        }
+        Optional<EstudianteEntity> estudiante = estudianteService.obtenerPorId(rut);
+        estudiante.ifPresent(e -> {
+            e.setTipo_pago(tipoPago);
+            estudianteRepository.save(e);
+        });
+    }
+
+    public Long montoTotalArancel(String rut){
+        Long montoTotal = 0L;
+        ArrayList<CuotaEntity> cuotasEstudiante = obtenerCutoasByRut(rut);
+
+        for (CuotaEntity cuota: cuotasEstudiante) {
+            montoTotal += cuota.getMonto();
+        }
+        return montoTotal;
+    }
+
+    public int cantidadCuotas(String rut){
+        ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
+        return cuotas.size();
+    }
+
+    public int cantidadCuotasPagadas(String rut){
+        ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
+        int cuotasPagadas = 0;
+        for (CuotaEntity cuota: cuotas) {
+            if (cuota.getEstado_pago().equals("Pagada")) {
+                cuotasPagadas += 1;
+            }
+        }
+        return cuotasPagadas;
+    }
+
+    public Long montoPagado(String rut){
+        ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
+        Long montoTotal = 0L;
+        for (CuotaEntity cuota: cuotas) {
+            if(cuota.getEstado_pago().equals("Pagada")){
+                montoTotal += cuota.getMonto();
+            }
+        }
+        return montoTotal;
+    }
+
+    public Long montoPorPagar(String rut){
+        ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
+        Long montoTotal = 0L;
+        for (CuotaEntity cuota: cuotas) {
+            if(cuota.getEstado_pago().equals("No pagada")){
+                montoTotal += cuota.getMonto();
+            }
+        }
+        return montoTotal;
+    }
+
+
+    //Recordar que si no hay un pago se retorna el 2000-01-01
+    public LocalDate ultimoPago(String rut){
+        ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
+        LocalDate ultimoPago = LocalDate.of(2000,1,1);
+
+        for (CuotaEntity cuota: cuotas) {
+            if(cuota.getFecha_pago() != null){
+                if (ultimoPago.isBefore(cuota.getFecha_pago())){
+                    ultimoPago = cuota.getFecha_pago();
+                }
+            }
+        }
+        return ultimoPago;
+    }
+
+    public int cuotasRetrasadas(String rut) {
+        ArrayList<CuotaEntity> cuotasEstudiante = cuotasNoPagadas(obtenerCutoasByRut(rut));
+
+        int cantCuotasAtrasadas = 0;
+
+        int mesesAtraso;
+        Long montoVariable;
+        Calendar calendario = Calendar.getInstance();
+        int mesActual = calendario.get(Calendar.MONTH) + 1;
+
+        for (CuotaEntity cuota : cuotasEstudiante) {
+            mesesAtraso = mesActual - cuota.getFecha_cuota().getMonthValue();
+            montoVariable = cuota.getMonto() - aplicarInteres(mesesAtraso, cuota.getMonto());
+            if(montoVariable<0){
+                cantCuotasAtrasadas += 1;
+            }
+        }
+        return cantCuotasAtrasadas;
+    }
+
+    public ArrayList<Integer> datosEnteros(String rut){
+        ArrayList<Integer> datos = new ArrayList<Integer>();
+        datos.add(pruebaService.cantExamenesRendidos(rut));
+        datos.add(pruebaService.obtenerPromedio(pruebaService.obtenerPruebasEstudiante(rut)));
+        datos.add(cantidadCuotas(rut));
+        datos.add(cantidadCuotasPagadas(rut));
+        datos.add(cuotasRetrasadas(rut));
+        return datos;
+    }
+
+    public ArrayList<Long> datosLong(String rut){
+        ArrayList<Long> datos = new ArrayList<Long>();
+        datos.add(montoTotalArancel(rut));
+        datos.add(montoPagado(rut));
+        datos.add(montoPorPagar(rut));
+        return datos;
+    }
+
 }

@@ -135,14 +135,15 @@ public class PruebaService {
         return filtrarPorAnhoActual(getPorRut(rut));
     }
 
-
-
-    /*
     public int cantExamenesRendidos(String rut){
-
+        ArrayList<PruebaEntity> pruebasEstudiante = obtenerPruebasEstudiante(rut);
+        if (pruebasEstudiante.isEmpty()){
+            return 0;
+        }else {
+            return pruebasEstudiante.size();
+        }
     }
 
-     */
 
 
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>TopEducation</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/estudiante/resumen-estado-pago-datos}">
+
+    <label for="rut" > Ingrese el rut a buscar: </label>
+    <input type="text" name="rut" placeholder="9-0" id="rut" required>
+
+    <button type="submit">Buscar estudiante</button>
+
+</form>
+
+<a href="http://localhost:8090" class="boton">Volver al menú de inicio</a>
+
+
+</body>
+</html>

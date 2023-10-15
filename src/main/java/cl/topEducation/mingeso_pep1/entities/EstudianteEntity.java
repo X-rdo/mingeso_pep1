@@ -24,6 +24,7 @@ public class EstudianteEntity {
     private String nombre_colegio;
     private int anho_egreso_colegio;
     private double arancel;
+    private String tipo_pago;
 
 
 }

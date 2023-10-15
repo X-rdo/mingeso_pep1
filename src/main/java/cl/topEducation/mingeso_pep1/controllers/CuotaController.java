@@ -36,18 +36,21 @@ public class CuotaController {
             int tipoColegio = estudianteService.verificarEstablecimiento(rut);
             if (tipoPago == 1) {
                 //El pago al contado se considera como una sola cuota "especial"
+                cuotaService.cambiarTipoPago(rut,tipoPago);
                 cuotaService.generarCuotas(rut,-1);
                 return "main_menu"; //
             } else if (tipoPago == 2) {
                 //Se redirecciona por el tipo de colegio
                 if(tipoColegio == 1){
                     redirectAttributes.addFlashAttribute("rut", rut);
+                    cuotaService.cambiarTipoPago(rut,tipoPago);
                     return "redirect:/cuota/cuotaMunicipal";
                 } else if (tipoColegio == 2) {
+                    cuotaService.cambiarTipoPago(rut,tipoPago);
                     redirectAttributes.addFlashAttribute("rut", rut);
                     return "redirect:/cuota/cuotaSubencionado";
                 } else {
-                    //generarCuotas()
+                    cuotaService.cambiarTipoPago(rut,tipoPago);
                     redirectAttributes.addFlashAttribute("rut", rut);
                     return "redirect:/cuota/cuotaPrivado";
                 }
@@ -114,6 +117,7 @@ public class CuotaController {
 
     @PostMapping("/rut-estudiante-listar-pago")
     public String listarPagos(@RequestParam String rut, Model model){
+        cuotaService.verificarYActualizarMontos(rut);
         ArrayList<CuotaEntity> cuotas = cuotaService.obtenerCutoasByRut(rut);
         model.addAttribute("cuotas",cuotas);
         return "listarCuotasEstudiantePago";
