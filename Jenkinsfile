@@ -8,15 +8,15 @@ pipeline{
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/X-rdo/mingeso_pep1']])
                 
-                    sh "ls"
-                    sh "mvn clean install"
+                    bat "ls"
+                    bat "mvn clean install"
                 
             }
         }
         stage("Build Docker Image"){
             steps {
                 
-                    sh "docker build -t xrdo51/proyecto_mingeso_pep1 ."
+                    bat "docker build -t xrdo51/proyecto_mingeso_pep1 ."
                 
             }
         }
@@ -26,19 +26,19 @@ pipeline{
                     withCredentials([string(credentialsId: 'dckrhubpassword', variable: 'dckpass')]) {
                         sh "docker login -u xrdo51 -p ${dckpass}"
                     }
-                    sh "docker push xrdo51/proyecto_mingeso_pep1"
+                    bat "docker push xrdo51/proyecto_mingeso_pep1"
                 
             }
         }
         stage("Test"){
             steps {
-                sh "mvn test"
+                bat "mvn test"
             }
         }
     }
     post {
         always {
-            sh "docker logout"
+            bat "docker logout"
         }
     }
 }
