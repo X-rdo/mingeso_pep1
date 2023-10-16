@@ -5,14 +5,11 @@ import cl.topEducation.mingeso_pep1.entities.EstudianteEntity;
 import cl.topEducation.mingeso_pep1.entities.PruebaEntity;
 import cl.topEducation.mingeso_pep1.repositories.CuotaRepository;
 import cl.topEducation.mingeso_pep1.repositories.EstudianteRepository;
-import jakarta.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.expression.spel.ast.NullLiteral;
+
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.text.BreakIterator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,7 +105,7 @@ public class CuotaService {
     }
 
     //Siendo el numero de cuota el primer dato del string[] y el segundo rut
-    public static String[] separaNumeroYrut(String numeroYRut) {
+    public String[] separaNumeroYrut(String numeroYRut) {
         String[] valores = numeroYRut.split(",");
         return valores;
     }
@@ -192,9 +189,6 @@ public class CuotaService {
             mesesAtraso = mesActual- cuota.getFecha_cuota().getMonthValue();
             cuota.setMonto_variable(aplicarInteres(mesesAtraso,cuota.getMonto()));
         }
-
-        //aplicar descuentos
-
         ArrayList<PruebaEntity> pruebasEstudiante = pruebaService.obtenerPruebasEstudiante(rut);
         int promedio = pruebaService.obtenerPromedio(pruebasEstudiante);
 
@@ -217,11 +211,9 @@ public class CuotaService {
             estudianteRepository.save(e);
         });
     }
-
     public Long montoTotalArancel(String rut){
         Long montoTotal = 0L;
         ArrayList<CuotaEntity> cuotasEstudiante = obtenerCutoasByRut(rut);
-
         for (CuotaEntity cuota: cuotasEstudiante) {
             montoTotal += cuota.getMonto();
         }
@@ -237,24 +229,22 @@ public class CuotaService {
         ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
         int cuotasPagadas = 0;
         for (CuotaEntity cuota: cuotas) {
-            if (cuota.getEstado_pago().equals("Pagada")) {
+            if (cuota.getEstado_pago().equals("Pagado")) {
                 cuotasPagadas += 1;
             }
         }
         return cuotasPagadas;
     }
-
     public Long montoPagado(String rut){
         ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
         Long montoTotal = 0L;
         for (CuotaEntity cuota: cuotas) {
-            if(cuota.getEstado_pago().equals("Pagada")){
+            if(cuota.getEstado_pago().equals("Pagado")){
                 montoTotal += cuota.getMonto();
             }
         }
         return montoTotal;
     }
-
     public Long montoPorPagar(String rut){
         ArrayList<CuotaEntity> cuotas = obtenerCutoasByRut(rut);
         Long montoTotal = 0L;
@@ -265,7 +255,6 @@ public class CuotaService {
         }
         return montoTotal;
     }
-
 
     //Recordar que si no hay un pago se retorna el 2000-01-01
     public LocalDate ultimoPago(String rut){
@@ -281,7 +270,6 @@ public class CuotaService {
         }
         return ultimoPago;
     }
-
     public int cuotasRetrasadas(String rut) {
         ArrayList<CuotaEntity> cuotasEstudiante = cuotasNoPagadas(obtenerCutoasByRut(rut));
 
@@ -291,7 +279,6 @@ public class CuotaService {
         Long montoVariable;
         Calendar calendario = Calendar.getInstance();
         int mesActual = calendario.get(Calendar.MONTH) + 1;
-
         for (CuotaEntity cuota : cuotasEstudiante) {
             mesesAtraso = mesActual - cuota.getFecha_cuota().getMonthValue();
             montoVariable = cuota.getMonto() - aplicarInteres(mesesAtraso, cuota.getMonto());
@@ -301,7 +288,6 @@ public class CuotaService {
         }
         return cantCuotasAtrasadas;
     }
-
     public ArrayList<Integer> datosEnteros(String rut){
         ArrayList<Integer> datos = new ArrayList<Integer>();
         datos.add(pruebaService.cantExamenesRendidos(rut));
@@ -311,7 +297,6 @@ public class CuotaService {
         datos.add(cuotasRetrasadas(rut));
         return datos;
     }
-
     public ArrayList<Long> datosLong(String rut){
         ArrayList<Long> datos = new ArrayList<Long>();
         datos.add(montoTotalArancel(rut));
@@ -319,5 +304,4 @@ public class CuotaService {
         datos.add(montoPorPagar(rut));
         return datos;
     }
-
 }

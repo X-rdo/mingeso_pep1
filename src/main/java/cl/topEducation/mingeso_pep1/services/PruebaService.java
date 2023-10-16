@@ -92,7 +92,7 @@ public class PruebaService {
         }
     }
 
-    public static String[] separarDDMMYY(String diaMesAnho) {
+    public String[] separarDDMMYY(String diaMesAnho) {
         String[] valores = diaMesAnho.split("-");
         return valores;
     }

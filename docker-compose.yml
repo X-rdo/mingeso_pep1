@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  app1:
+    container_name: spring-boot-docker1
+    image: xrdo51/proyecto_mingeso_pep1
+    ports:
+      - "8091:8090"
+    depends_on:
+      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/topEducationDB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=raam161029
+  app2:
+    container_name: spring-boot-docker2
+    image: xrdo51/proyecto_mingeso_pep1
+    ports:
+      - "8092:8090"
+    depends_on:
+      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/topEducationDB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=raam161029
+  app3:
+    container_name: spring-boot-docker3
+    image: xrdo51/proyecto_mingeso_pep1
+    ports:
+      - "8093:8090"
+    depends_on:
+      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/topEducationDB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=raam161029
+  db:
+    image: postgres:15.1-alpine
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=raam161029
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app1
+      - app2
+      - app3
