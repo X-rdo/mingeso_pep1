@@ -21,7 +21,7 @@ pipeline{
             steps {
                 
                     withCredentials([string(credentialsId: 'dckrhubpassword', variable: 'dckpass')]) {
-                        sh "docker login -u xrdo51 -p ${dckpass}"
+                        bat "docker login -u xrdo51 -p ${dckpass}"
                     }
                     bat "docker push xrdo51/proyecto_mingeso_pep1"
                 
