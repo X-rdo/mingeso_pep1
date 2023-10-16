@@ -32,17 +32,13 @@ pipeline{
         }
         stage("Test"){
             steps {
-                
-                    sh "mvn test"
-                
+                sh "mvn test"
             }
         }
     }
     post {
         always {
-            
-                sh "docker logout"
-            
+            sh "docker logout"
         }
     }
 }
