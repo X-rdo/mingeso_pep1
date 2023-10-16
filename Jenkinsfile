@@ -7,10 +7,7 @@ pipeline{
         stage("Build JAR"){
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/X-rdo/mingeso_pep1']])
-                
-                    bat "ls"
                     bat "mvn clean install"
-                
             }
         }
         stage("Build Docker Image"){
