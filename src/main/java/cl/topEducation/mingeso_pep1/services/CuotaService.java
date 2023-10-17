@@ -73,7 +73,10 @@ public class CuotaService {
     //capaz puede retornar un 1 o -1 para ver si corrió perfectamente
     public void generarCuotas(String rut, int cantCuotas){
         Optional<EstudianteEntity> estudiante = estudianteRepository.findById(rut);
+        System.out.println("estudiante AAAAAAAAAAAAAAAAAAAAAAAAAA= " + estudiante);
         if(estudiante.isPresent()){
+            System.out.println("\n");
+            System.out.println("estudiante = " + estudiante);
             CuotaEntity cuotaVariable;
             double arancelEstudiante = estudiante.get().getArancel();
 
