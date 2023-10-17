@@ -69,6 +69,7 @@ public class CuotaController {
 
     @PostMapping("/cuotaSubencionado")
     public String cuotasSubvencionado (@ModelAttribute("rut") String rut, @RequestParam int cantCuotas, Model model){
+        model.addAttribute("rut",rut);
         cuotaService.generarCuotas(rut, cantCuotas);
         return "redirect:/";
     }
