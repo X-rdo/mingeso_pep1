@@ -8,7 +8,7 @@
 </head>
 <body>
 <p th:text="${rut}"></p>
-<form method="post" th:action="@{/cuota/cuotaMunicipal}" onsubmit="alert('Se han generado las cuotas')">
+<form method="post" th:action="@{/cuota/cuotaMunicipal}">
     <input type="hidden" name="rut" th:value="${rut}"/>
     <label for="cantCuotas" > Ingrese la cantidad de cuotas: </label>
     <select name="cantCuotas" id="cantCuotas">
