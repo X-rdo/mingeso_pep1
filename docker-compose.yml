@@ -13,6 +13,16 @@ services:
       - app1
       - app2
       - app3
+  db:
+    image: postgres:15.1-alpine
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=topEducationDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=raam161029
   app1:
     container_name: spring-boot-docker1
     image: xrdo51/proyecto_mingeso_pep1
@@ -55,12 +65,3 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/topEducationDB
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=raam161029
-  db:
-    image: postgres:15.1-alpine
-    container_name: db
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=raam161029
