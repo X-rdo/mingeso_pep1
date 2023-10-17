@@ -99,6 +99,7 @@ public class CuotaService {
                 if (mesPartidaCuotas > 12){
                     mesPartidaCuotas = 1;
                 }
+                System.out.println(cuotaVariable);
                 cuotaRepository.save(cuotaVariable);
             }
         }
