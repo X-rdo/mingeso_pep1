@@ -5,13 +5,11 @@
     <title>Menú topEducation</title>
 </head>
 <body>
-<a href="http://localhost:8090/" class="boton"></a>
 
-<div class="btn-container">
-    <form method="get" th:action="@{/estudiante/nuevo-estudiante}">
-        <button class="ui-button">Ingresar estudiante</button>
-    </form>
-</div>
+
+<a th:href="@{/estudiante/nuevo-estudiante}">
+    Generar cuotas
+</a>
 
 <a th:href="@{/cuota/generar-cuotas}">
     Generar cuotas
