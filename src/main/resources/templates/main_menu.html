@@ -13,19 +13,25 @@
     </form>
 </div>
 
-
 <a th:href="@{/cuota/generar-cuotas}">
-    Generar cuotas test 1
+    Generar cuotas
 </a>
-<a href="http://localhost:8090/cuota/generar-cuotas" class="boton">Generar cuota</a>
 
-<a href="http://localhost:8090/cuota/rut-estudiante-listar" class="boton">Buscar cuotas de un estudiante</a>
+<a th:href="@{/cuota/rut-estudiante-listar}">
+    Buscar cuotas de un estudiante
+</a>
 
-<a href="http://localhost:8090/cuota/rut-estudiante-listar-p" class="boton">Pagar cuotas estudiante</a>
+<a th:href="@{/cuota/rut-estudiante-listar-p}">
+    Pagar cuotas estudiante
+</a>
 
-<a href="http://localhost:8090/cargar-archivo" class="boton">Subida de archivos</a>
+<a th:href="@{/cargar-archivo}">
+    Subida de archivos
+</a>
 
-<a href="http://localhost:8090/estudiante/resumen-estado-pago" class="boton">Resumen de estado de pagos</a>
+<a th:href="@{/estudiante/resumen-estado-pago}">
+    Resumen de estado de pagos
+</a>
 
 
 </body>
