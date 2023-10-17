@@ -1,5 +1,18 @@
 version: "3.8"
 services:
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app1
+      - app2
+      - app3
   app1:
     container_name: spring-boot-docker1
     image: xrdo51/proyecto_mingeso_pep1
@@ -51,15 +64,3 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=raam161029
-  nginx:
-    image: nginx:latest
-    container_name: nginx-proxy
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - app1
-      - app2
-      - app3
